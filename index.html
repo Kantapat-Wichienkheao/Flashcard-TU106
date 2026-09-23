@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Communication Vocabulary Flashcards (Chap 1-8)</title>
+<style>
+  :root{
+    --bg1:#0f1220; --bg2:#1a1f3a;
+    --card-front:#ffffff; --card-back:#fef9f0;
+    --accent:#7c5cff; --accent2:#ff8a5c;
+    --text-dark:#1e1e2e; --text-mid:#4a4a5e; --text-light:#8888a0;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;min-height:100%;}
+  body{
+    font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    color:#fff;
+    padding:16px;
+  }
+  h1{
+    font-size:1.4rem;
+    margin:8px 0 4px;
+    text-align:center;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    font-weight:800;
+  }
+  .subtitle{color:var(--text-light);font-size:.85rem;margin-bottom:14px;text-align:center;}
+
+  .controls{
+    width:100%;max-width:520px;
+    display:flex;flex-wrap:wrap;gap:8px;
+    justify-content:center;margin-bottom:14px;
+  }
+  select, input[type=text], button{
+    font-family:inherit;font-size:.85rem;
+    border-radius:10px;border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.08);
+    color:#fff;padding:8px 12px;
+    cursor:pointer;
+    outline:none;
+  }
+  select:focus, input[type=text]:focus{border-color:var(--accent);}
+  input[type=text]{cursor:text;flex:1;min-width:140px;}
+  button{transition:transform .12s,background .2s;}
+  button:hover{background:rgba(255,255,255,.16);}
+  button:active{transform:scale(.95);}
+  button.primary{background:linear-gradient(90deg,var(--accent),#9b7bff);border:none;font-weight:600;}
+  button.primary:hover{filter:brightness(1.1);}
+  option{color:#111;}
+
+  .progress-wrap{width:100%;max-width:520px;margin-bottom:10px;}
+  .progress-bar{height:6px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .25s;}
+  .progress-label{font-size:.75rem;color:var(--text-light);margin-top:4px;text-align:center;}
+
+  .stage{
+    width:100%;max-width:520px;
+    perspective:1600px;
+    margin-bottom:16px;
+  }
+  .card{
+    position:relative;
+    width:100%;
+    min-height:340px;
+    border-radius:20px;
+    cursor:pointer;
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.4,.2,.2,1);
+    box-shadow:0 10px 40px rgba(0,0,0,.35);
+  }
+  .card.flipped{transform:rotateY(180deg);}
+  .face{
+    position:absolute;inset:0;
+    -webkit-backface-visibility:hidden;backface-visibility:hidden;
+    border-radius:20px;
+    display:flex;flex-direction:column;
+    padding:24px;
+    overflow-y:auto;
+  }
+  .face.front{
+    background:linear-gradient(160deg,var(--card-front),#eef0ff);
+    align-items:center;justify-content:center;
+    text-align:center;
+  }
+  .face.back{
+    background:linear-gradient(160deg,var(--card-back),#fff3e0);
+    transform:rotateY(180deg);
+    color:var(--text-dark);
+  }
+  .chip{
+    display:inline-block;
+    font-size:.7rem;font-weight:700;letter-spacing:.04em;
+    color:#fff;background:var(--accent);
+    padding:4px 10px;border-radius:999px;
+    margin-bottom:14px;
+    text-transform:uppercase;
+  }
+  .front .term{
+    font-size:1.6rem;font-weight:800;color:var(--text-dark);
+    line-height:1.25;
+  }
+  .front .hint{
+    margin-top:18px;font-size:.75rem;color:var(--text-light);
+  }
+  .back .short-thai{
+    font-size:1.15rem;font-weight:700;color:var(--accent);
+    background:rgba(124,92,255,.08);
+    border-radius:12px;
+    padding:10px 14px;
+    margin-bottom:14px;
+    line-height:1.4;
+  }
+  .back .def-block{margin-bottom:12px;}
+  .back .def-label{
+    font-size:.7rem;font-weight:800;letter-spacing:.05em;
+    color:var(--accent2);text-transform:uppercase;
+    margin-bottom:4px;
+  }
+  .back .def-text{font-size:.92rem;line-height:1.5;color:var(--text-mid);}
+  .back .def-text.thai{color:var(--text-dark);}
+
+  .nav-row{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    width:100%;max-width:520px;margin-bottom:8px;
+  }
+  .nav-row button{min-width:44px;font-size:1.1rem;padding:8px 14px;}
+  .counter{font-size:.85rem;color:var(--text-light);min-width:70px;text-align:center;}
+
+  .list-panel{
+    width:100%;max-width:520px;
+    margin-top:18px;
+    background:rgba(255,255,255,.05);
+    border-radius:16px;
+    padding:12px;
+    max-height:260px;
+    overflow-y:auto;
+  }
+  .list-panel h3{margin:4px 8px 8px;font-size:.85rem;color:var(--text-light);}
+  .word-chip{
+    display:inline-block;font-size:.78rem;
+    padding:6px 10px;margin:3px;border-radius:8px;
+    background:rgba(255,255,255,.08);
+    cursor:pointer;
+  }
+  .word-chip:hover{background:rgba(124,92,255,.3);}
+  .word-chip.current{background:var(--accent);font-weight:700;}
+
+  footer{color:var(--text-light);font-size:.72rem;margin:18px 0 6px;text-align:center;}
+
+  @media (max-width:400px){
+    .card{min-height:380px;}
+    .front .term{font-size:1.35rem;}
+  }
+</style>
+</head>
+<body>
+
+<h1>Communication Vocabulary Flashcards</h1>
+<div class="subtitle" id="subtitle">Loading…</div>
+
+<div class="controls">
+  <select id="chapterSelect"></select>
+  <input type="text" id="searchBox" placeholder="Search word…">
+  <button id="shuffleBtn">🔀 Shuffle</button>
+  <button id="resetBtn">↺ Reset order</button>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel"></div>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="face front">
+      <div>
+        <span class="chip" id="chapterChip">Chapter 1</span>
+        <div class="term" id="frontTerm">Word</div>
+        <div class="hint">Tap card to flip · use arrow keys</div>
+      </div>
+    </div>
+    <div class="face back">
+      <div class="short-thai" id="backShort">ความหมายสั้น</div>
+      <div class="def-block">
+        <div class="def-label">English Definition</div>
+        <div class="def-text" id="backEng"></div>
+      </div>
+      <div class="def-block">
+        <div class="def-label">Thai Definition</div>
+        <div class="def-text thai" id="backThai"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-row">
+  <button id="prevBtn">◀ Prev</button>
+  <div class="counter" id="counter">1 / 127</div>
+  <button class="primary" id="flipBtn">Flip</button>
+  <button id="nextBtn">Next ▶</button>
+</div>
+
+<div class="list-panel">
+  <h3>Jump to a word</h3>
+  <div id="wordList"></div>
+</div>
+
+<footer>Keyboard: ← → to navigate, Space/Enter to flip · Works fully offline</footer>
+
+<script>
+const CHAPTERS = [
+{
+  title: "Chapter 1",
+  words: [
+    {t:"Communication", short:"การสื่อสาร", eng:"A systemic process in which people interact with and through symbols to create and interpret meanings.", thai:"กระบวนการที่คนเราใช้สัญลักษณ์ต่างๆ มาคุยกันหรือปฏิสัมพันธ์กัน เพื่อสร้างและตีความหมายเรื่องราวร่วมกันอย่างเป็นระบบ"},
+    {t:"Content level of meaning", short:"ความหมายระดับเนื้อหา", eng:"One of two levels of meaning; the literal information in a message.", thai:"ความหมายตรงตัวของข้อความหรือสารที่พูดออกไป (พูดอะไรก็หมายความตามนั้นเลย)"},
+    {t:"Feedback", short:"ข้อมูลป้อนกลับ / การตอบกลับ", eng:"Verbal or nonverbal response to a message. The concept of feedback as applied to human communication appeared first in interactive models of communication.", thai:"การตอบกลับสาร ทั้งการพูดตอบ หรือการแสดงสีหน้าท่าทาง ซึ่งแนวคิดนี้เริ่มนำมาใช้ในแบบจำลองการสื่อสารแบบปฏิสัมพันธ์"},
+    {t:"Homeostasis", short:"ภาวะสมดุล", eng:"A state of equilibrium that systems strive for but cannot sustain.", thai:"สภาวะสมดุลที่ระบบพยายามจะรักษาไว้ให้ได้ แต่ก็ไม่อาจคงอยู่แบบนั้นได้ตลอดเวลา"},
+    {t:"Meaning", short:"ความหมาย", eng:"The significance we attribute to a phenomenon; what it signifies to us.", thai:"คุณค่าหรือความสำคัญที่เราให้กับสิ่งๆ หนึ่ง หรือความหมายที่สิ่งนั้นสื่อถึงตัวเรา"},
+    {t:"Noise", short:"สิ่งรบกวนการสื่อสาร", eng:"Anything that interferes with the intended meaning of communication; includes sounds (e.g., traffic) as well as psychological interferences (e.g., preoccupation).", thai:"อะไรก็ตามที่มาขัดขวางไม่ให้สื่อสารกันเข้าใจ เช่น เสียงรถดังรบกวน หรือเรื่องกังวลใจที่ทำให้ฟังไม่รู้เรื่อง"},
+    {t:"Openness", short:"ความเปิดกว้างของระบบ", eng:"The extent to which a system interacts with its surrounding environment.", thai:"ระดับที่ระบบหนึ่งๆ เปิดรับหรือมีปฏิสัมพันธ์กับสภาพแวดล้อมรอบข้างมากน้อยแค่ไหน"},
+    {t:"Process", short:"กระบวนการที่ต่อเนื่อง", eng:"An ongoing continuity, the beginning and end of which are difficult to identify; for example, communication.", thai:"เรื่องที่ดำเนินไปอย่างต่อเนื่องเรื่อยๆ จนยากจะชี้ชัดว่าเริ่มตรงไหนและจบลงตรงไหน เหมือนกับการสื่อสาร"},
+    {t:"Relationship level of meaning", short:"ความหมายระดับความสัมพันธ์", eng:"One of two levels of meaning in communication; expresses the relationship between communicators.", thai:"ความหมายที่ซ่อนอยู่หลังคำพูด ซึ่งบอกให้รู้ว่าคนที่คุยกันมีความสัมพันธ์ต่อกันยังไง (เช่น สนิทกัน สนิทมาก หรือเกรงใจกัน)"},
+    {t:"Symbols", short:"สัญลักษณ์", eng:"An arbitrary, ambiguous, and abstract representation of a phenomenon. Symbols are the basis of language, much nonverbal behavior, and human thought.", thai:"สิ่งที่ใช้แทนความหมายของสิ่งต่างๆ ซึ่งมนุษย์สมมติขึ้นมาเอง มีความนัย และมีความคลุมเครืออยู่ในตัว เป็นรากฐานของภาษา ท่าทาง และความคิดของคนเรา"},
+    {t:"System", short:"ระบบ", eng:"A group of interrelated elements that affect one another. Communication is systemic.", thai:"กลุ่มของสิ่งต่างๆ ที่เกี่ยวข้องกันและส่งผลกระทบถึงกันตลอด ซึ่งการสื่อสารก็ทำงานเป็นระบบแบบนี้เหมือนกัน"}
+  ]
+},
+{
+  title: "Chapter 2",
+  words: [
+    {t:"Critical research method", short:"การวิจัยเชิงวิพากษ์", eng:"A type of data analysis that aims to identify, critique, or change communication practices that oppress, marginalize, or otherwise harm people.", thai:"วิธีวิเคราะห์ข้อมูลที่มุ่งจับผิด ชี้ให้เห็น หรือแก้ไขการสื่อสารที่กดขี่ เอาเปรียบ หรือทำร้ายคนอื่นในสังคม"},
+    {t:"Ethics", short:"จริยธรรม", eng:"The branch of philosophy that deals with the goodness or rightness of particular actions. Ethical issues infuse all areas of the communication field.", thai:"หลักความคิดเรื่องความถูกต้องเหมาะสมของการกระทำ ซึ่งเรื่องจริยธรรมนี้แทรกซึมอยู่ในทุกๆ ด้านของการสื่อสาร"},
+    {t:"Ethos", short:"ความน่าเชื่อถือของผู้พูด", eng:"One of three forms of proof; proof based on the speaker's credibility (trustworthiness, expertise, and goodwill).", thai:"โน้มน้าวใจคนฟังด้วยความน่าเชื่อถือของผู้พูดเอง (เช่น ความเชี่ยวชาญ ความจริงใจ หรือความน่าไว้วางใจ)"},
+    {t:"Interpersonal communication", short:"การสื่อสารระหว่างบุคคล", eng:"Communication between people, usually in close relationships such as friendship and romance.", thai:"การพูดคุยกันระหว่างคนสองคนขึ้นไป มักเกิดในความสัมพันธ์ที่ใกล้ชิด เช่น เพื่อนสนิทหรือคนรัก"},
+    {t:"Intrapersonal communication", short:"การสื่อสารกับตัวเอง", eng:"Communication with ourselves, or self-talk.", thai:"การคุยกับตัวเอง หรือความคิดในหัวของตัวเอง"},
+    {t:"Logos", short:"การใช้เหตุผลและตรรกะ", eng:"One of three forms of proof; proof based on logic and reasoning.", thai:"โน้มน้าวใจคนฟังด้วยตรรกะ เหตุผล และข้อเท็จจริง"},
+    {t:"Organizational culture", short:"วัฒนธรรมองค์กร", eng:"Understandings about identity and codes of thought and action that are shared by the members of an organization.", thai:"ความเข้าใจร่วมกันของคนในองค์กรเกี่ยวกับตัวตน วิธีคิด และกติกาการทำงานที่คนในนั้นยึดถือเหมือนกัน"},
+    {t:"Pathos", short:"การเล่นกับอารมณ์ความรู้สึก", eng:"One of three forms of proof; proof based on appealing to listeners' emotions.", thai:"โน้มน้าวใจคนฟังโดยการกระตุ้นหรือจูงใจอารมณ์ความรู้สึกของผู้ฟัง"},
+    {t:"Qualitative research methods", short:"วิจัยเชิงคุณภาพ", eng:"Interpretive techniques, including textual analysis and ethnography, used to understand the character of experience, particularly how people perceive and make sense of communication.", thai:"วิธีศึกษาเน้นเนื้องานและการตีความ (เช่น ถอดบทสัมภาษณ์ เจาะลึกวิถีชีวิต) เพื่อเข้าใจว่าคนเราตีความและให้ความหมายกับการสื่อสารอย่างไร"},
+    {t:"Quantitative research methods", short:"วิจัยเชิงปริมาณ", eng:"Techniques such as descriptive statistics, surveys, and experiments, used to gather quantifiable data.", thai:"วิธีศึกษาเน้นตัวเลขและสถิติ (เช่น ทำแบบสอบถาม การทดลอง) เพื่อรวบรวมข้อมูลที่วัดผลได้ชัดเจน"},
+    {t:"Triangulation", short:"การตรวจสอบข้อมูลจากหลายมุม", eng:"Studying phenomena from multiple points of view by relying on multiple sources of data, theories, researchers, and/or methodological approaches.", thai:"การศึกษาเรื่องใดเรื่องหนึ่งจากหลายๆ มุม โดยใช้แหล่งข้อมูล ทฤษฎี หรือวิธีวิจัยหลายๆ แบบมาร่วมกัน เพื่อให้ผลลัพธ์แม่นยำที่สุด"}
+  ]
+},
+{
+  title: "Chapter 3",
+  words: [
+    {t:"Attribution", short:"การเดาสาเหตุพฤติกรรม", eng:"An explanation of why things happen and why people act as they do; not necessarily correct interpretations of others and their motives.", thai:"การพยายามอธิบายว่าทำไมเรื่องนี้ถึงเกิดขึ้น หรือทำไมคนนั้นถึงทำแบบนั้น ซึ่งเราอาจจะเดาเจตนาเขาผิดก็ได้"},
+    {t:"Cognitive complexity", short:"ความซับซ้อนทางความคิด", eng:"The number of mental constructs an individual uses, how abstract they are, and how elaborately they interact to create perceptions.", thai:"ความสามารถในการคิดวิเคราะห์ที่มีหลายมิติ ยิ่งมีสูงก็ยิ่งมองคนหรือสถานการณ์ได้ละเอียดลึกซึ้ง ไม่มองอะไรแบบตื้นๆ"},
+    {t:"Cognitive schemata", short:"กรอบความคิดในหัว", eng:"Mental structures people use to organize and interpret experience. Four schemata have been identified: prototypes, personal constructs, stereotypes, and scripts.", thai:"โครงสร้างความคิดในสมองที่คนเราใช้จัดระบบและตีความสิ่งที่เจอ ประกอบด้วย 4 รูปแบบหลัก (Prototypes, Personal constructs, Stereotypes และ Scripts)"},
+    {t:"Constructivism", short:"ทฤษฎีการสร้างความรู้/การจัดระบบความคิด", eng:"A theory that holds that we organize and interpret experience by applying cognitive structures called schemata.", thai:"ทฤษฎีที่บอกว่าคนเราเข้าใจสิ่งต่างๆ รอบตัวได้ เพราะเราใช้กรอบความคิด (Schemata) ในหัวมาช่วยจัดระเบียบและตีความ"},
+    {t:"Culture", short:"วัฒนธรรม", eng:"The beliefs, understandings, practices, and ways of interpreting experience that are shared by a group of people.", thai:"ความเชื่อ ความเข้าใจ และวิถีชีวิตที่กลุ่มคนกลุ่มหนึ่งยึดถือและใช้ตีความเรื่องราวต่างๆ ร่วมกัน"},
+    {t:"Empathy", short:"การเอาใจเขามาใส่ใจเรา", eng:"The ability to feel with another person, to feel what he or she feels in a situation.", thai:"ความสามารถในการรับรู้และรู้สึกไปพร้อมกับคนอื่น อินไปกับสิ่งที่เขาเจอในสถานการณ์นั้นๆ"},
+    {t:"Expectancy violation theory", short:"ทฤษฎีเมื่อคนอื่นทำไม่ตรงกับที่เราคิด", eng:"A theory claiming that when our expectations are violated, we become more cognitively alert as we struggle to understand and cope with unexpected behaviors.", thai:"ทฤษฎีที่อธิบายว่า พอมีใครทำตัวหลุดไปจากสิ่งที่เราคาดหวัง เราจะตื่นตัวขึ้นมาทันทีเพื่อพยายามเข้าใจว่าทำไมเขาถึงทำแบบนั้น"},
+    {t:"Individualism", short:"นิยามการยึดถือความเป็นตัวเอง / ปัจเจกนิยม", eng:"A predominant Western value that regards each person as unique, important, and to be recognized for her or his individual qualities and behavior.", thai:"ค่านิยมที่ให้ความสำคัญกับตัวบุคคล มองว่าทุกคนมีเอกลักษณ์เฉพาะตัว มีอิสระ และควรได้รับการยอมรับจากผลงานหรือการกระทำของตัวเอง"},
+    {t:"Inference", short:"การอนุมาน / การคิดเอาเองจากเบาะแส", eng:"An interpretation that goes beyond the facts known but is believed to logically follow from them.", thai:"การตีความต่อยอดไปจากข้อเท็จจริงเท่าที่มี โดยเชื่อว่าน่าจะเป็นแบบนั้นอย่างมีเหตุผล"},
+    {t:"Interpretation", short:"การตีความ", eng:"The subjective process of organizing and making sense of perceptions.", thai:"กระบวนการส่วนตัวในการทำความเข้าใจและให้ความหมายกับสิ่งที่เราสังเกตเห็น"},
+    {t:"Judgment", short:"การตัดสิน / การใส่ความคิดเห็น", eng:"A belief or opinion based on observations, feelings, assumptions, or other nonfactual phenomena.", thai:"ความคิดเห็นหรือข้อสรุปที่เกิดจากการสังเกต ความรู้สึก หรือการเดาของเราเอง โดยไม่ได้อิงจากข้อเท็จจริง"},
+    {t:"Mind reading", short:"การเดาใจคนอื่น", eng:"The assumption that we understand what another person thinks or how another person perceives something.", thai:"การคิดเอาเองว่าเรารู้ว่าอีกฝ่ายกำลังคิดอะไรอยู่ หรือมองเรื่องต่างๆ ยังไง ทั้งที่เขาไม่ได้พูด"},
+    {t:"Monitoring", short:"การเช็กและคุมพฤติกรรมตัวเอง", eng:"The observation and regulation of one's own communication.", thai:"การคอยสังเกตและปรับเปลี่ยนการพูดหรือท่าทางของตัวเองให้เหมาะสมอยู่ตลอดเวลา"},
+    {t:"Perception", short:"การรับรู้", eng:"An active process of selecting, organizing, and interpreting people, objects, events, situations, and activities.", thai:"กระบวนการที่สมองเราคัดเลือก จัดระบบ และตีความสิ่งที่พบเห็น ไม่ว่าจะเป็นคน สิ่งของ หรือเหตุการณ์ต่างๆ"},
+    {t:"Personal construct", short:"เกณฑ์ตัดสินส่วนตัว", eng:"A bipolar mental yardstick that allows us to measure people and situations along specific dimensions of judgment, such as \"honest-dishonest.\"", thai:"ไม้บรรทัดวัดคนในหัวเราแบบ 2 ขั้วตรงข้ามที่เราใช้ประเมินคนอื่น เช่น \"จริงใจ-เสแสร้ง\" หรือ \"ฉลาด-ไม่ฉลาด\""},
+    {t:"Person-centeredness", short:"การมองคนตรงหน้าเป็นเอกเทศ", eng:"The ability to perceive another as a unique and distinct individual apart from social roles and generalizations.", thai:"ความสามารถในการมองเห็นคนตรงหน้าในฐานะคนๆ หนึ่งจริงๆ โดยไม่เอาอคติ บทบาททางสังคม หรือภาพจำเหมาเอามาตัดสินเขา"},
+    {t:"Positive visualization", short:"การสร้างภาพความสำเร็จในหัว", eng:"A technique for reducing speaking anxiety, in which one visualizes oneself communicating effectively in progressively challenging speaking situations.", thai:"เทคนิคการลดความตื่นเต้นด้วยการจินตนาการภาพตัวเองว่ากำลังพูดได้อย่างมั่นใจและประสบความสำเร็จ"},
+    {t:"Prototype", short:"ภาพต้นแบบในหัว", eng:"A knowledge structure that defines the clearest or most representative example of some category.", thai:"ตัวอย่างที่เป๊ะที่สุดหรือชัดเจนที่สุดเมื่อเรานึกถึงคนหรือสิ่งของในกลุ่มนั้นๆ (เช่น พอนึกถึง \"เพื่อนที่ดีที่สุด\" จะมีภาพคนๆ หนึ่งลอยขึ้นมาทันที)"},
+    {t:"Schemata", short:"กรอบความคิดทั้งหมดในสมอง", eng:"Cognitive structures we use to organize and interpret experiences. The four types of schemata are prototypes, personal constructs, stereotypes, and scripts. (Singular: schema)", thai:"คลังกรอบความคิดในสมองที่เราใช้จัดระบบและเข้าใจเรื่องราวต่างๆ (คำพหูพจน์คือ Schemata ส่วนเอกพจน์คือ Schema)"},
+    {t:"Script", short:"สคริปต์ขั้นตอนพฤติกรรม", eng:"One of four cognitive schemata; scripts define expected or appropriate sequences of action in particular settings.", thai:"ขั้นตอนพฤติกรรมตามลำดับที่เราคาดหวังว่าจะเกิดขึ้นในสถานการณ์นั้นๆ (เช่น พอเข้าร้านอาหารสั่งอาหาร → กิน → เช็กบิล)"},
+    {t:"Self-serving bias", short:"การเข้าข้างตัวเอง", eng:"The tendency to attribute our positive actions and successes to stable, global, internal influences that we control and to attribute negative actions and failures to unstable, specific, external influences beyond our control.", thai:"นิสัยชอบเข้าข้างตัวเอง พอทำสำเร็จก็บอกว่าเพราะเราเก่ง แต่พอผิดพลาดกลับโทษฟ้าโทษฝนหรือคนอื่น"},
+    {t:"Social community", short:"กลุ่มสังคมย่อย", eng:"A group of people who live within a dominant culture yet also belong to another social group or groups that share values, understandings, and practices distinct from those of the dominant culture.", thai:"กลุ่มคนที่อยู่อาศัยในวัฒนธรรมใหญ่ แต่ก็มีกลุ่มย่อยของตัวเองที่มีค่านิยมและวิถีชีวิตเฉพาะตัวแยกออกมา"},
+    {t:"Stereotype", short:"การเหมารวม", eng:"A predictive generalization about people or situations.", thai:"การสรุปเดาเอาเองว่าคนหรือกลุ่มคนนั้นๆ ต้องเป็นแบบนั้นแบบนี้แน่นอน โดยอิงจากภาพจำ"}
+  ]
+},
+{
+  title: "Chapter 4",
+  words: [
+    {t:"Abstract", short:"ความเป็นนามธรรม", eng:"Removed from concrete reality. Symbols are abstract because they refer to, but are not equivalent to, reality.", thai:"สภาพจับต้องไม่ได้ สัญลักษณ์เป็นสิ่งนามธรรมเพราะมันแค่ \"ถูกใช้แทน\" ความจริง ไม่ใช่ตัวความจริงจริงๆ"},
+    {t:"Ambiguous", short:"ความคลุมเครือ", eng:"Subject to multiple meanings. Symbols are ambiguous because their meanings vary from person to person, context to context, and so forth.", thai:"การตีความได้หลายแบบ สัญลักษณ์จะคลุมเครือเพราะความหมายเปลี่ยนไปตามคนพูด บริบท และสถานการณ์"},
+    {t:"Arbitrary", short:"การสมมติขึ้นมาเอง", eng:"Random or not necessary. Symbols are arbitrary because there is no need for any particular symbol to stand for a particular referent.", thai:"การไม่มีเหตุผลบังคับ สัญลักษณ์เกิดขึ้นจากการที่คนเราตั้งหรือสมมติขึ้นมาใช้เรียกแทนสิ่งนั้นๆ เอง"},
+    {t:"Brute facts", short:"ข้อเท็จจริงเชิงกายภาพ", eng:"Objective, concrete phenomena.", thai:"ปรากฏการณ์ทางกายภาพที่เห็นๆ กันอยู่ ชัดเจน และเป็นวัตถุจับต้องได้"},
+    {t:"Communication rules", short:"กฎการสื่อสาร", eng:"Shared understandings of what communication means and what behaviors are appropriate in various situations.", thai:"ข้อตกลงร่วมกันในสังคมว่าการกระทำแบบไหนหมายความว่าอย่างไร และควรทำตัวอย่างไรในสถานการณ์ต่างๆ"},
+    {t:"Constitutive rules", short:"กฎการตีความพฤติกรรม", eng:"Communication rules that specify how certain communicative acts are to be counted.", thai:"กฎที่บอกเราว่าการกระทำแบบนี้ถือว่าคืออะไร (เช่น การสบตาแปลว่าตั้งใจฟัง การยกมือไหว้แปลว่าเคารพ)"},
+    {t:"Hypothetical thought", short:"การคิดเชิงสมมติ", eng:"Thinking about experiences and ideas that do not exist or are not present to the senses.", thai:"การคิดถึงเรื่องราว จินตนาการ หรืออดีต/อนาคตที่ไม่ได้เกิดขึ้นตรงหน้าในตอนนี้"},
+    {t:"I", short:"ตัวตนฝั่งอยากทำ / ไอ", eng:"The creative, spontaneous, impulsive aspect of the self. The I is complemented by the me.", thai:"ด้านของตัวตนที่เป็นสายสร้างสรรค์ ทำตามอารมณ์ ทำตามสัญชาตญาณดั้งเดิม ทำงานคู่กับ Me"},
+    {t:"I-language", short:"ภาษาเน้น \"ฉัน\"", eng:"Language that identifies the speaker's or perceiver's thoughts and feelings. (Compare with you-language.)", thai:"คำพูดที่เริ่มต้นจากความรู้สึกของตัวเอง เช่น \"ฉันรู้สึกกังวลเวลา...\" แทนการไปโทษคนอื่น"},
+    {t:"Indexing", short:"การระบุเวลาและบริบทกำกับ", eng:"A technique of noting that every statement reflects a specific time and circumstance and may not apply to other times or circumstances.", thai:"วิธีการเตือนตัวเองว่า คำพูดหนึ่งๆ ใช้ได้กับเหตุการณ์ ณ เวลานั้นเท่านั้น เอาไปตัดสินเวลาอื่นไม่ได้"},
+    {t:"Institutional facts", short:"ข้อเท็จจริงที่คนในสังคมให้ความหมาย", eng:"Meanings people assign to brute facts (objective, concrete phenomena) that are based on human interpretation.", thai:"ความหมายที่มนุษย์ใส่ให้กับข้อเท็จจริงทางกายภาพ (Brute facts) เช่น เห็นคนกอดกัน (Brute fact) คนให้ความหมายว่าคือการแสดงความรัก (Institutional fact)"},
+    {t:"Loaded language", short:"ภาษาใส่อารมณ์ชี้นำ", eng:"An extreme form of evaluative language that relies on words that strongly slant perceptions and thus meanings.", thai:"คำพูดที่ใส่อารมณ์ลงไปเข้มข้นจนทำให้คนฟังรู้สึกคล้อยตามหรือจงใจชี้นำความคิดอย่างแรง"},
+    {t:"Me", short:"ตัวตนฝั่งยับยั้งชั่งใจ / มี", eng:"The reflective, analytical, socially conscious aspect of self. Me complements the I aspect of self.", thai:"ด้านของตัวตนที่คอยคิด วิเคราะห์ และคำนึงถึงกติกาหรือความเหมาะสมในสังคม คอยดึงจังหวะของ I เอาไว้"},
+    {t:"Nonverbal communication", short:"อวัจนภาษา / ภาษากาย", eng:"All forms of communication other than words themselves; includes inflection and other vocal qualities as well as several other behaviors such as shrugs, blushing, and eye movements.", thai:"การสื่อสารทุกรูปแบบที่ไม่ใช่ตัวคำพูด เช่น สีหน้า น้ำเสียง กิริยาท่าทาง ยักไหล่ หรือสายตา"},
+    {t:"Punctuation", short:"การตัดบทแบ่งจุดเริ่ม-จบสนทนา", eng:"Defining the beginning and ending of interaction or interaction episodes. Punctuation is subjective and not always agreed on by those involved in the interaction.", thai:"การมองว่าเรื่องราวหรือการทะเลาะกันเริ่มจากตรงไหนและจบลงตรงไหน ซึ่งแต่ละฝ่ายมักมองไม่เหมือนกัน (ต่างคนต่างคิดว่าอีกฝ่ายเริ่มก่อน)"},
+    {t:"Reappropriation", short:"การดึงคำด่ากลับมาใช้ให้เป็นคำบวก", eng:"A group's reclamation of a term used by others to degrade the group's members; the treatment of those terms as positive self-descriptions. Aims to remove the stigma from terms that others use pejoratively.", thai:"การที่กลุ่มคนที่เคยถูกด่าด้วยคำเหยียด นำคำนั้นกลับมาใช้เรียกตัวเองในเชิงภาคภูมิใจ เพื่อลบล้างความหมายแย่ๆ ออกไป"},
+    {t:"Regulative rules", short:"กฎกำกับกาลเทศะ", eng:"Communication rules that regulate interaction by specifying when, how, where, and with whom to talk about certain things.", thai:"กฎที่บอกว่าเรื่องนี้ควรพูดเมื่อไหร่ พูดอย่างไร พูดที่ไหน และพูดกับใครถึงจะเหมาะสม"},
+    {t:"Static evaluation", short:"การประเมินแบบเหมาว่าไม่มีวันเปลี่ยน", eng:"An assessment that suggests that something is unchanging or static; e.g., \"Bob is impatient.\"", thai:"การตัดสินคนอื่นแบบติดตราประทับว่าเขาเป็นคนแบบนั้นอย่างตายตัว เช่น \"บ็อบเป็นคนใจร้อน\" (มองว่าเขาไม่มีวันเปลี่ยน)"},
+    {t:"Totalizing", short:"การมองจุดเดียวเป็นทั้งหมดของชีวิต", eng:"Responding to a person as if one aspect of that person were the total of who the person is.", thai:"การปฏิบัติต่อคนๆ หนึ่งโดยเอาลักษณะเด่นเพียงมุมเดียวของเขา มาตัดสินว่าเป็นตัวตนทั้งหมดของเขา"},
+    {t:"Verbal communication", short:"วัจนภาษา / ภาษาพูด", eng:"Words and only words; does not include inflection, accent, volume, pitch, or other paralinguistic features of speech.", thai:"ข้อความหรือถ้อยคำล้วนๆ ไม่นับรวมน้ำเสียง เสียงสูงต่ำ หรือความดัง"},
+    {t:"You-language", short:"ภาษาเน้นโทษ \"คุณ\"", eng:"Language that attributes intentions and motives to another person, usually the person to whom one is speaking. (Compare with I-language.)", thai:"คำพูดที่ชอบเริ่มต้นด้วยการชี้หน้าโทษอีกฝ่าย เช่น \"เธอทำตัวแย่มาก\" ซึ่งมักทำให้อีกฝ่ายอยากตอบโต้"}
+  ]
+},
+{
+  title: "Chapter 5 (Nonverbal Comm)",
+  words: [
+    {t:"Artifact", short:"ของใช้แสดงตัวตน", eng:"Any personal object with which one announces one's identities or personalizes one's environment.", thai:"สิ่งของส่วนตัวที่ใช้บอกสไตล์หรือตัวตนของเรา หรือเอาไว้แต่งห้องให้เป็นสไตล์เรา (เช่น นาฬิกา เสื้อผ้า ของสะสม)"},
+    {t:"Chronemics", short:"ภาษาเวลา", eng:"Nonverbal communication involving the perception and use of time to define identities and interaction.", thai:"การใช้เวลาสื่อสารความหมาย เช่น การตรงต่อเวลา การปล่อยให้คนอื่นรอ สะท้อนถึงความสำคัญหรือสถานะ"},
+    {t:"Environmental factor", short:"ปัจจัยสภาพแวดล้อม", eng:"Any nonverbal element of a setting that affects how we think, feel, act, and communicate.", thai:"สิ่งต่างๆ ในสถานที่ที่ส่งผลต่ออารมณ์และการพูดคุยของเรา เช่น แสง สี เสียง อุณหภูมิ หรือการจัดเก้าอี้"},
+    {t:"Haptics", short:"ภาษาสัมผัส", eng:"Nonverbal communication involving physical touch.", thai:"การสื่อสารผ่านการสัมผัสทางร่างกาย เช่น การจับมือ การกอด หรือการแตะไหล่"},
+    {t:"Kinesics", short:"ภาษากายและสีหน้า", eng:"Body position and body motions, including those of the face, that may be used to communicate or may be interpreted as communicating.", thai:"ท่าทางการเคลื่อนไหวของร่างกาย การขยับมือ การมองตา และสีหน้า ที่สื่อความหมายให้คนอื่นรู้"},
+    {t:"Olfactics", short:"ภาษากลิ่น", eng:"The perception of scents and odors; one form of nonverbal communication.", thai:"การสื่อความหมายผ่านกลิ่น เช่น กลิ่นน้ำหอม กลิ่นตัว หรือกลิ่นอาหาร"},
+    {t:"Paralanguage", short:"น้ำเสียงและเสียงประกอบ", eng:"Communication that is vocal but not verbal. Paralanguage includes accent, inflection, volume, pitch, and sounds such as murmurs and gasps.", thai:"เสียงที่ออกจากปากแต่ไม่ใช่คำพูด เช่น น้ำเสียง ความดัง-เบา เสียงถอนหายใจ หรือเสียงอุทาน"},
+    {t:"Physical appearance", short:"รูปลักษณ์ภายนอก", eng:"A form of nonverbal communication; how we look, including the cultural meanings, values, and expectations associated with looks.", thai:"รูปร่าง หน้าตา เสื้อผ้า หน้าผม ซึ่งสื่อสารคุณค่าและความหมายตามที่สังคมคาดหวัง"},
+    {t:"Proxemics", short:"ภาษาระยะห่าง", eng:"A form of nonverbal communication that involves space and how we use it.", thai:"การใช้พื้นที่และระยะห่างระหว่างบุคคลเพื่อบอกระดับความสนิทสนม"},
+    {t:"Silence", short:"ความเงียบ", eng:"Lack of sound. Silence can be a powerful form of nonverbal communication.", thai:"การเงียบเสียง ซึ่งสามารถสื่อความหมายได้ทรงพลังมาก (เช่น เงียบเพราะโกรธ เงียบเพราะเกรงใจ หรือเงียบเพราะเห็นด้วย)"}
+  ]
+},
+{
+  title: "Chapter 6 (Listening)",
+  words: [
+    {t:"Ambishing", short:"ฟังเพื่อซุ่มโจมตี", eng:"Listening carefully to a speaker in order to attack her or him.", thai:"ตั้งใจฟังอย่างดี แต่มุ่งตั้งรับเพื่อจับผิดและรอโอกาสเถียงกลับหรือโจมตีผู้พูด"},
+    {t:"Defensive listening", short:"ฟังแบบคอยระวังตัว", eng:"The perception of personal attacks, criticisms, or hostile undertones in communication when none is intended.", thai:"การฟังแบบระแวง คิดไปเองว่าคนอื่นกำลังพูดแซะ หรือตำหนิตนเอง ทั้งที่เขาไม่ได้หมายความแบบนั้นเลย"},
+    {t:"Environmental distraction", short:"สิ่งบรรยากาศรอบข้างรบกวนการฟัง", eng:"In communication situations, any occurrence that interferes with listening.", thai:"สิ่งรบกวนรอบตัวที่ทำให้ฟังไม่รู้เรื่อง เช่น เสียงจอแจ แสงไฟจ้า หรือโทรศัพท์ดัง"},
+    {t:"Hearing", short:"การได้ยิน", eng:"A physiological activity that occurs when sound waves hit our eardrums. Unlike listening, hearing is a passive process.", thai:"เสียงวิ่งมากระทบแก้วหูตามธรรมชาติ เป็นเรื่องการรับรู้ทางร่างกายที่เกิดขึ้นเอง ต่างจากการฟัง"},
+    {t:"Incomprehensibility", short:"ฟังไม่รู้เรื่องจากอุปสรรค", eng:"When a message is not clearly understandable due to language or transmission problems; one of four situational obstacles to listening.", thai:"ฟังไม่เข้าใจเพราะปัญหาทางภาษา ศัพท์ยากเกินไป หรือสัญญาณสื่อสารไม่ชัดเจน"},
+    {t:"Informational listening", short:"ฟังเพื่อเอาข้อมูล", eng:"Listening to understand information and ideas.", thai:"การตั้งใจฟังเพื่อเก็บข้อมูล ทำความเข้าใจเนื้อหาหรือข้อคิดต่าง ๆ (เช่น ฟังชีตติว)"},
+    {t:"Critical listening", short:"ฟังแบบวิเคราะห์ประเมิน", eng:"Listening to analyze and evaluate the content of communication or the character of the person speaking.", thai:"ฟังไปคิดตามไป เพื่อประเมินว่าสิ่งที่พูดน่าเชื่อถือไหม มีเหตุผลหรือเปล่า"},
+    {t:"Listening", short:"การฟัง", eng:"A complex process that consists of being mindful, hearing, selecting and organizing information, interpreting communication, responding, and remembering.", thai:"กระบวนการฟังที่ต้องใช้พลังสมอง ประกอบด้วย การตั้งสติ ได้ยิน คัดเลือกเนื้อหา ตีความ ตอบรับ และจดจำ"},
+    {t:"Literal listening", short:"ฟังแค่คำตรงตัว", eng:"Listening only to the content level of meaning and ignoring the relationship level of meaning.", thai:"ฟังและเข้าใจแค่คำพูดตรงตัว แต่ไม่แคร์ความรู้สึกหรือน้ำเสียงที่ซ่อนอยู่ข้างหลังเลย"},
+    {t:"Message complexity", short:"สารซับซ้อนเกินไป", eng:"The amount of detailed information or intricate reasoning in a message; can interfere with effective listening.", thai:"ข้อความซับซ้อน มีรายละเอียดหรือเนื้อหาเยอะเกินไปจนคนฟังจับใจความยาก"},
+    {t:"Message overload", short:"สารเยอะเกินรับไหว", eng:"The receiving of more messages than we can interpret, evaluate, and remember; can interfere with effective listening.", thai:"ได้รับข้อมูลถาโถมเข้ามามากเกินกว่าที่สมองจะประมวลผลและจดจำได้ทัน"},
+    {t:"Mindfulness", short:"การตั้งสติอยู่กับการฟัง", eng:"From Buddhism, the concept of being fully present in the moment; the first step of listening and the foundation of all the other steps.", thai:"การดึงตัวเองให้อยู่กับปัจจุบัน ตั้งใจฟังคนตรงหน้าอย่างเต็มที่ ไม่ปล่อยให้ใจลอย"},
+    {t:"Minimal encourager", short:"การผงกศีรษะหรือส่งเสียงตอบรับสั้นๆ", eng:"Communication that gently invites another person to elaborate by expressing interest in hearing more.", thai:"การพูดหรือทำท่าทางสั้นๆ (เช่น \"อืม\", \"จริงเหรอ\", พยักหน้า) เพื่อบอกว่าฟังอยู่นะ พูดต่อได้เลย"},
+    {t:"Monopolizing", short:"การผูกขาดการพูด", eng:"Hogging the stage by continuously focusing communication on oneself instead of on the person who is talking.", thai:"แย่งซีนคุย คอยดึงบทสนทนากลับมาเรื่องของตัวเองตลอดเวลาโดยไม่ยอมฟังคนอื่น"},
+    {t:"Paraphrasing", short:"การทวนความด้วยคำพูดตัวเอง", eng:"A method of clarifying another's meaning by reflecting one's interpretation of the other's communication back to that person.", thai:"การเช็กความเข้าใจด้วยการพูดสรุปสิ่งที่อีกฝ่ายพูดด้วยคำพูดของเราเอง แล้วถามเขาว่าเข้าใจถูกไหม"},
+    {t:"Prejudgment", short:"การด่วนตัดสินไปก่อน", eng:"Judging others or their ideas before one has heard them.", thai:"ตัดสินคนอื่นหรือคิดแทนไปแล้ว ทั้งที่เขายังพูดไม่ทันจบ"},
+    {t:"Preoccupation", short:"การใจลอยคิดเรื่องตัวเอง", eng:"Absorption in our own thoughts or concerns.", thai:"มัวแต่หมกมุ่นกังวลอยู่กับเรื่องของตัวเองจนไม่มีสติฟังสิ่งที่คนอื่นพูด"},
+    {t:"Pseudolistening", short:"แกล้งทำเป็นฟัง", eng:"Pretending to listen.", thai:"แกล้งทำเป็นพยักหน้าฟังไปงั้นๆ แต่จริงๆ ในหัวไม่ได้เข้าหูเลย"},
+    {t:"Relationship listening", short:"ฟังเพื่อเยียวยาและซัพพอร์ต", eng:"Listening to support another person or to understand how another person thinks, feels, or perceives some situation, event, or other phenomenon.", thai:"ฟังเพื่อซัพพอร์ตความรู้สึกของอีกฝ่าย อยากเข้าใจว่าเขารู้สึกและคิดยังไง"},
+    {t:"Remembering", short:"การจดจำเรื่องที่ฟัง", eng:"The process of recalling what one has heard; the sixth element of listening.", thai:"กระบวนการระลึกและนึกออกถึงเรื่องราวที่ได้ฟังมา"},
+    {t:"Responding", short:"การแสดงการตอบรับ", eng:"Symbolizing interest in what is being said with observable feedback to speakers during interaction; the fifth of six elements of listening.", thai:"การแสดงออกให้อีกฝ่ายรู้ว่าเราฟังอยู่ เช่น สบตา โต้ตอบ หรือถามคำถาม"},
+    {t:"Selective listening", short:"เลือกฟังเฉพาะที่อยากฟัง", eng:"Focusing only on selected parts of communication; e.g., screening out parts of a message that don't interest us or riveting our attention on parts we agree with.", thai:"เลือกฟังแต่เรื่องที่ตัวเองสนใจหรือเห็นด้วย ส่วนเรื่องที่ไม่สนใจหรือไม่ชอบก็หูทวนลมใส่"}
+  ]
+},
+{
+  title: "Chapter 7 (Relationships & Conflict)",
+  words: [
+    {t:"Acknowledgment", short:"การรับฟังและตอบรับความรู้สึก", eng:"The second of three levels of interpersonal confirmation; communicating that you hear and understand another's expressed feelings and thoughts.", thai:"การแสดงให้อีกฝ่ายรู้ว่าเราฟังอยู่นะ และเข้าใจความรู้สึกกับความคิดที่เขาพูดออกมา"},
+    {t:"Bracketing", short:"การพักประเด็นย่อยไว้ก่อน", eng:"Identifying and setting aside for later discussion the issues peripheral to a current conflict.", thai:"การแปะโน้ตหรือพักเรื่องย่อยๆ ที่ไม่เกี่ยวกับเรื่องที่กำลังทะเลาะกันไว้ก่อน เพื่อเอาไว้เคลียร์วันหลัง"},
+    {t:"Communication climate", short:"บรรยากาศการสื่อสาร", eng:"The overall feeling, or emotional mood, between people.", thai:"อารมณ์หรือบรรยากาศโดยรวมเวลาคนเราคุยกัน (เช่น รู้สึกผ่อนคลาย อบอุ่น หรือรู้สึกอึดอัด กดดัน)"},
+    {t:"Conflict", short:"ความขัดแย้ง", eng:"The expression of different views, interests, or goals and the perception of differences as incompatible by people who depend on each other.", thai:"การที่คนที่ต้องเกี่ยวข้องกันมีความคิดเห็น ความสนใจ หรือเป้าหมายไม่ตรงกัน แล้วรู้สึกว่าไปด้วยกันไม่ได้"},
+    {t:"Covert conflict", short:"ความขัดแย้งแบบคลื่นใต้กรับ/แอบงอน", eng:"Conflict that is expressed indirectly; generally more difficult to manage constructively than overt conflict.", thai:"การขัดแย้งแบบไม่พูดออกมาตรงๆ ชอบประชดประชัน วางฟอร์ม หรือทำเป็นไม่สนใจ ซึ่งแก้ปัญหาได้ยากกว่าการพูดกันตรงๆ"},
+    {t:"Endorsement", short:"การยืนยันและเห็นความสำคัญของความรู้สึก", eng:"The third of three levels of interpersonal confirmation; the communication of acceptance of another's thoughts and feelings. Not the same as agreement.", thai:"การยอมรับและให้คุณค่ากับความรู้สึกของอีกฝ่ายว่าเขามีสิทธิ์ที่จะรู้สึกแบบนั้นได้"},
+    {t:"Ethnocentrism", short:"การเอาวัฒนธรรมตัวเองเป็นศูนย์กลาง", eng:"The tendency to assume that one way of life is normal and superior to other ways of life.", thai:"นิสัยที่ชอบคิดว่าวิถีชีวิตหรือวัฒนธรรมของตัวเองถูกต้องและดีที่สุด ส่วนของคนอื่นแปลกหรือไม่ดี"},
+    {t:"Grace", short:"การให้อภัยด้วยความเมตตา", eng:"Granting forgiveness, putting aside our own needs, or helping another save face when no standard says we should or must do so.", thai:"การยอมให้อภัย การยอมลดตัวตนลง หรือช่วยรักษาหน้าคนอื่น โดยทำด้วยน้ำใจแท้ๆ ไม่ได้มีใครบังคับ"},
+    {t:"Interpersonal confirmation", short:"การยอมรับตัวตนของอีกฝ่าย", eng:"The expressed valuing of another person.", thai:"การแสดงออกให้คนอื่นรู้ว่าเราเห็นคุณค่าและยอมรับในตัวเขา"},
+    {t:"Lose-lose", short:"มุมมองแบบแพ้คู่", eng:"One of three orientations to conflict; assumes that everyone loses when conflict occurs.", thai:"ความคิดที่มองว่า ทะเลาะกันไปก็พังทั้งคู่ พังพินาศไม่มีใครได้อะไร"},
+    {t:"Overt conflict", short:"ความขัดแย้งแบบเปิดหน้าชน", eng:"Conflict expressed directly and in a straightforward manner.", thai:"การแสดงความไม่พอใจหรือขัดแย้งกันอย่างตรงไปตรงมา เคลียร์กันตรงๆ"},
+    {t:"Recognition", short:"การรับรู้ว่ามีตัวตนอยู่", eng:"The most basic level of interpersonal confirmation; the communication of awareness that another person exists and is present.", thai:"การแสดงออกขั้นพื้นฐานว่าเห็นเขาอยู่ในสายตา เช่น ทักทาย สบตา หรือพยักหน้าให้"},
+    {t:"Win-lose", short:"มุมมองแบบต้องมีคนชนะ-คนแพ้", eng:"One of three orientations toward conflict; assumes that in any conflict one person wins and the others lose.", thai:"ความคิดที่มองว่า การทะเลาะกันต้องมีคนหนึ่งชนะ และอีกคนต้องแพ้เท่านั้น"},
+    {t:"Win-win", short:"มุมมองแบบได้ประโยชน์ทั้งคู่", eng:"One of three orientations to conflict; assumes that everyone involved in a conflict can win and attempts to bring about a mutually satisfying solution.", thai:"ความคิดที่เชื่อว่า ความขัดแย้งหาทางออกที่พอใจกันทั้งสองฝ่ายได้ โดยไม่ต้องมีใครเสียประโยชน์"}
+  ]
+},
+{
+  title: "Chapter 8 (Culture)",
+  words: [
+    {t:"Assimilation", short:"การกลืนหายไปกับวัฒนธรรมใหม่", eng:"The giving up of one's native ways to take on the ways of another culture.", thai:"การยอมทิ้งวิถีชีวิตดั้งเดิมของตัวเอง แล้วปรับตัวกลมกลืนไปกับวัฒนธรรมใหม่ทั้งหมด"},
+    {t:"Collectivist culture", short:"วัฒนธรรมเน้นพวกพ้อง/กลุ่มนิยม", eng:"A culture that regards people as deeply connected to one another and to their families, groups, and communities.", thai:"วัฒนธรรมที่ให้ความสำคัญกับส่วนรวม ครอบครัว และพวกพ้องมากกว่าเรื่องของตัวเอง"},
+    {t:"Cultural relativism", short:"การเข้าใจความต่างทางวัฒนธรรม", eng:"The recognition that cultures vary in thought, action, and behavior as well as in beliefs and values; not the same as moral relativism.", thai:"การยอมรับว่าแต่ละวัฒนธรรมมีวิธีคิดและพฤติกรรมต่างกัน โดยไม่เอาเกณฑ์ตัวเองไปตัดสินคนอื่น"},
+    {t:"High-context communication style", short:"พูดอ้อมๆ พึ่งบริบทสูง", eng:"An indirect and undetailed way of speaking that conveys meanings implicitly rather than explicitly; typical of collectivist cultures.", thai:"สไตล์การพูดที่ไม่พูดตรงๆ เน้นใช้ความรู้สึก ท่าทาง และบริบทช่วยสื่อความหมาย มักพบในสังคมกลุ่มนิยม"},
+    {t:"Individualistic culture", short:"วัฒนธรรมเน้นตัวเอง/ปัจเจกนิยม", eng:"A culture in which each person is viewed as distinct from other people, groups, and organizations.", thai:"วัฒนธรรมที่มองทุกคนเป็นอิสระต่อกัน พึ่งพาตัวเอง และเน้นเป้าหมายส่วนตัวเป็นหลัก"},
+    {t:"Low-context communication style", short:"พูดตรงไปตรงมา พึ่งบริบทต่ำ", eng:"Language that is very explicit, detailed, and precise; generally used in individualistic cultures.", thai:"สไตล์การพูดที่ตรงไปตรงมา ชัดเจน ชัดถ้อยชัดคำ เน้นเนื้อหาบทสนทนาเป็นหลัก"},
+    {t:"Multilingual", short:"การพูดและเข้าใจได้หลายภาษา", eng:"Able to speak and understand more than one language or communication style used in a social group or culture.", thai:"ความสามารถในการพูดและเข้าใจได้หลายภาษา หรือเข้าถึงสไตล์การสื่อสารของหลายๆ กลุ่มวัฒนธรรม"},
+    {t:"Participation", short:"การกระโดดเข้าร่วมวัฒนธรรมอื่น", eng:"A response to cultural diversity in which one incorporates some practices, customs, and traditions of other groups into one's life.", thai:"การเปิดรับความหลากหลายด้วยการดึงเอาวัฒนธรรม ประเพณี หรือวิถีชีวิตของกลุ่มอื่นเข้ามาทดลองทำในชีวิตเรา"},
+    {t:"Resistance", short:"การต่อต้านความต่าง", eng:"A response to cultural diversity; attacking the cultural practices of others or proclaiming that one's own cultural traditions are superior.", thai:"การต่อต้านความหลากหลาย โดยคอยด่าทอวัฒนธรรมอื่น หรืออวดอ้างว่าวัฒนธรรมตัวเองเหนือกว่า"},
+    {t:"Respect", short:"การเคารพในความต่าง", eng:"A response to cultural diversity in which one values others' customs, traditions, and values even if one does not actively incorporate them into one's life.", thai:"การให้เกียรติและเห็นคุณค่าในวัฒนธรรมของผู้อื่น แม้เราจะไม่ได้เอามาทำตามก็ตาม"},
+    {t:"Standpoint", short:"มุมมองจากจุดยืนทางสังคม", eng:"The social, symbolic, and material conditions common to a group of people that influence how they understand themselves, others, and society.", thai:"มุมมองต่อโลกที่ถูกหล่อหลอมมาจากสถานะหรือประสบการณ์ชีวิตที่กลุ่มของตนเองเจอ"},
+    {t:"Standpoint theory", short:"ทฤษฎีมุมมองตามจุดยืน", eng:"A theory that holds that a culture includes a number of social groups that differently shape the perceptions, identities, and opportunities of members of those groups.", thai:"ทฤษฎีที่บอกว่า คนเราอยู่ในกลุ่มสังคมที่ต่างกัน (เช่น เพศ ชนชั้น) จะมีมุมมอง โอกาส และการรับรู้โลกที่ไม่เหมือนกัน"},
+    {t:"Tolerance", short:"การยอมทนอยู่ร่วมกับความต่าง", eng:"A response to diversity in which one accepts differences, although one may not approve of or even understand them.", thai:"การยอมรับความแตกต่างแบบถอยออกมาหนึ่งก้าว คือยอมให้อยู่ร่วมกันได้ แม้ลึกๆ อาจจะไม่ชอบหรือไม่เข้าใจก็ตาม"},
+    {t:"Uncertainty reduction theory", short:"ทฤษฎีการลดความลังเลสงสัย", eng:"The theory that people find uncertainty uncomfortable and so are motivated to use communication to reduce uncertainty.", thai:"ทฤษฎีที่อธิบายว่า มนุษย์เราอึดอัดเวลาเจอความไม่แน่นอน จึงต้องพยายามใช้การสื่อสารไปพูดคุยเพื่อหาข้อมูลมาลดความสงสัยนั้น"},
+    {t:"Understanding", short:"การเข้าใจรากเหง้าของความต่าง", eng:"A response to cultural diversity that assumes that differences are rooted in cultural teachings and that no traditions, customs, or behaviors are intrinsically better than others.", thai:"การเข้าใจว่าความต่างมาจากคำสอนของแต่ละวัฒนธรรม และไม่มีวัฒนธรรมไหนที่ดีหรือเลวร้ายไปกว่ากันโดยแท้จริง"}
+  ]
+}
+];
+
+(function(){
+  const chapterSelect = document.getElementById('chapterSelect');
+  const searchBox = document.getElementById('searchBox');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const card = document.getElementById('card');
+  const frontTerm = document.getElementById('frontTerm');
+  const chapterChip = document.getElementById('chapterChip');
+  const backShort = document.getElementById('backShort');
+  const backEng = document.getElementById('backEng');
+  const backThai = document.getElementById('backThai');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const flipBtn = document.getElementById('flipBtn');
+  const counter = document.getElementById('counter');
+  const progressFill = document.getElementById('progressFill');
+  const progressLabel = document.getElementById('progressLabel');
+  const wordList = document.getElementById('wordList');
+  const subtitle = document.getElementById('subtitle');
+
+  let ALL = [];
+  CHAPTERS.forEach(ch => {
+    ch.words.forEach(w => ALL.push(Object.assign({chapter: ch.title}, w)));
+  });
+
+  let deck = ALL.slice();
+  let idx = 0;
+  let flipped = false;
+
+  chapterSelect.innerHTML = '<option value="all">All chapters (127 terms)</option>' +
+    CHAPTERS.map(c => `<option value="${c.title}">${c.title}</option>`).join('');
+
+  subtitle.textContent = ALL.length + ' terms across ' + CHAPTERS.length + ' chapters';
+
+  function applyFilter(){
+    const chapterVal = chapterSelect.value;
+    const q = searchBox.value.trim().toLowerCase();
+    deck = ALL.filter(w => {
+      const chOk = chapterVal === 'all' || w.chapter === chapterVal;
+      const qOk = !q || w.t.toLowerCase().includes(q) || w.short.includes(q);
+      return chOk && qOk;
+    });
+    idx = 0;
+    flipped = false;
+    render();
+  }
+
+  function shuffleDeck(){
+    for(let i = deck.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i+1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+    idx = 0; flipped = false; render();
+  }
+
+  function render(){
+    if(deck.length === 0){
+      frontTerm.textContent = 'No matches';
+      chapterChip.textContent = '—';
+      backShort.textContent = '';
+      backEng.textContent = '';
+      backThai.textContent = '';
+      counter.textContent = '0 / 0';
+      progressFill.style.width = '0%';
+      progressLabel.textContent = 'No cards';
+      renderList();
+      return;
+    }
+    if(idx < 0) idx = deck.length - 1;
+    if(idx >= deck.length) idx = 0;
+    const w = deck[idx];
+    frontTerm.textContent = w.t;
+    chapterChip.textContent = w.chapter;
+    backShort.textContent = w.short;
+    backEng.textContent = w.eng;
+    backThai.textContent = w.thai;
+    counter.textContent = (idx+1) + ' / ' + deck.length;
+    progressFill.style.width = ((idx+1)/deck.length*100) + '%';
+    progressLabel.textContent = 'Card ' + (idx+1) + ' of ' + deck.length;
+    card.classList.toggle('flipped', flipped);
+    renderList();
+  }
+
+  function renderList(){
+    wordList.innerHTML = deck.map((w,i) =>
+      `<span class="word-chip ${i===idx?'current':''}" data-i="${i}">${w.t}</span>`
+    ).join('');
+  }
+
+  wordList.addEventListener('click', e => {
+    const chip = e.target.closest('.word-chip');
+    if(!chip) return;
+    idx = parseInt(chip.dataset.i, 10);
+    flipped = false;
+    render();
+  });
+
+  card.addEventListener('click', () => { flipped = !flipped; card.classList.toggle('flipped', flipped); });
+  flipBtn.addEventListener('click', () => { flipped = !flipped; card.classList.toggle('flipped', flipped); });
+  prevBtn.addEventListener('click', () => { idx--; flipped = false; render(); });
+  nextBtn.addEventListener('click', () => { idx++; flipped = false; render(); });
+  shuffleBtn.addEventListener('click', shuffleDeck);
+  resetBtn.addEventListener('click', () => { applyFilter(); });
+  chapterSelect.addEventListener('change', applyFilter);
+  searchBox.addEventListener('input', applyFilter);
+
+  document.addEventListener('keydown', e => {
+    if(e.key === 'ArrowRight'){ idx++; flipped=false; render(); }
+    else if(e.key === 'ArrowLeft'){ idx--; flipped=false; render(); }
+    else if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); flipped=!flipped; card.classList.toggle('flipped', flipped); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
